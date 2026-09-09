@@ -1,0 +1,21 @@
+# The university logo goes wherever \uniimg points, by default a common-assets/
+# directory beside the document. No image is tracked here: a university logo is
+# the institution's trademark, not part of this work, so it is not
+# redistributed. See the README.
+common-assets/
+
+# LaTeX build artefacts, in case a document is compiled in this directory.
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+_minted*/

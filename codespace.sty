@@ -1,0 +1,53 @@
+\ProvidesPackage{codespace}[2026/09/10 v1.0 Code listings and algorithm environments]
+%%
+%% Copyright (c) 2026, Adityarup Laha
+%% All rights reserved.
+%%
+%% Licensed under the BSD 3-Clause License. See the LICENSE file in the project
+%% root for the full text.
+%%
+%% The university logo referenced by \uniimg is NOT part of this work and is
+%% not distributed with it. See README.md.
+%%
+
+\RequirePackage{tikz}
+\RequirePackage[framemethod=tikz]{mdframed}
+\RequirePackage{minted,verbatim}
+\RequirePackage{embedfile}
+\RequirePackage{hypgotoe}
+\RequirePackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
+
+\usemintedstyle{emacs}
+
+\newenvironment{code}[1]{%
+  \VerbatimEnvironment%
+  \begin{mdframed}[leftline=false,rightline=false,backgroundcolor=magenta!10,nobreak=false]%
+    \begin{minted}[linenos=true,breaklines,breaksymbolleft=,obeytabs=true,tabsize=2]{#1}%
+}{%
+    \end{minted}%
+  \end{mdframed}%
+}
+
+\newcommand{\codeinclude}[2]{%
+  \@ifundefined{EmFi@done@#2}{%
+    \embedfile[desc=\detokenize{#2},filespec=\detokenize{#2}]{#2}%
+    \global\@namedef{EmFi@done@#2}{1}%
+  }{}%
+  \begin{mdframed}[leftline=false,rightline=false,backgroundcolor=magenta!10,nobreak=false]%
+    \noindent{\small\sffamily\bfseries #1 file -- \texttt{\detokenize{#2}}\hfill\href{gotoe:embedded=\detokenize{#2}}{\fbox{\footnotesize\sffamily\bfseries Embedded File --- Click to Download}}}%
+    \par\vspace{0.3em}\hrule\vspace{0.5em}%
+    \inputminted[linenos=true,breaklines,breaksymbolleft=,obeytabs=true,tabsize=2]{#1}{#2}%
+  \end{mdframed}%
+}
+
+\newcommand{\codeattach}[2]{%
+  \@ifundefined{EmFi@done@#2}{%
+    \embedfile[desc=\detokenize{#2},filespec=\detokenize{#2}]{#2}%
+    \global\@namedef{EmFi@done@#2}{1}%
+  }{}%
+  \begin{mdframed}[leftline=false,rightline=false,backgroundcolor=magenta!10,nobreak=false]%
+    \noindent{\small\sffamily\bfseries #1 file -- \texttt{\detokenize{#2}}\hfill\href{gotoe:embedded=\detokenize{#2}}{\fbox{\footnotesize\sffamily\bfseries Embedded File --- Click to Download}}}%
+    \par\vspace{0.3em}\hrule\vspace{0.5em}%
+    \textit{Full content omitted for brevity; please download the file or use the embedded file viewer (on supported platforms) to see the content.}%
+  \end{mdframed}%
+}
