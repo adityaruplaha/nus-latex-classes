@@ -1,0 +1,44 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerinnerthemenus}[2026/09/28 v1.0 Inner theme for beamerthemenus]
+%%
+%% Copyright (c) 2026, Adityarup Laha. BSD 3-Clause; see LICENSE.
+%%
+%% Descends, substantially modified, from the ZHAW beamer template by Martin
+%% Oswald; see beamerthemenus.sty for the full provenance.
+%%
+
+\mode<presentation>
+
+%----------------------------------------
+%   ITEMIZE
+%----------------------------------------
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{itemize subsubitem}[square]
+
+%----------------------------------------
+%   BLOCKS
+%----------------------------------------
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%----------------------------------------
+%   CAPTIONS
+%----------------------------------------
+% Numbered, as in nus-report.cls, so that a figure carried over from the report
+% keeps the number the report gave it and a question about it can name it.
+\setbeamertemplate{caption}[numbered]
+\setbeamerfont{caption}{size=\footnotesize}
+
+%----------------------------------------
+%   TOC
+%----------------------------------------
+\setbeamertemplate{section in toc}{%
+  \textcolor{nusBlue}{\normalsize\textbullet}\hskip1.5ex\inserttocsection\par
+}
+\setbeamertemplate{subsection in toc}{%
+  \hskip1.0ex\textcolor{nusBlue}{\normalsize$\hookrightarrow$}\hskip1.5ex\inserttocsubsection\par
+}
+\setbeamertemplate{subsubsection in toc}{}
+
+%----------------------------------------
+\mode<all>

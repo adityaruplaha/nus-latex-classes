@@ -1,0 +1,198 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerouterthemenus}[2026/09/28 v1.0 Outer theme for beamerthemenus]
+%%
+%% Copyright (c) 2026, Adityarup Laha. BSD 3-Clause; see LICENSE.
+%%
+%% Descends, substantially modified, from the ZHAW beamer template by Martin
+%% Oswald; see beamerthemenus.sty for the full provenance.
+%%
+
+\mode<presentation>
+
+%----------------------------------------
+%   TITLE PAGE
+%----------------------------------------
+% A full-bleed institutional ground with the reversed logo on it, the title
+% block set left rather than centred, and one rule rather than a pair.
+%
+% Left, not centred, because a centred block gives the eye no entry point and a
+% long author list breaks badly: four names centred wrap mid-name, where set
+% ragged-right they run on. One rule, because the second only ever separated
+% the title from the date, which a vertical gap does already.
+%
+% What is deliberately not on this page, each of which was: the document type
+% as a heading of its own, which sits beside the department instead; the
+% advisor's designation on a line of its own, when the department is already on
+% the page; and a decorative band at the foot. Together they made nine bands of
+% text compete for one slide.
+%
+% Use it on a frame of its own with the chrome suppressed:
+%   \frame[plain]{\titlepage}
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[nusBlue] (current page.north west) rectangle (current page.south east);
+    \node[anchor=north east,inner sep=\nusb@lrmargin] at (current page.north east)
+      {\includegraphics[height=12mm]{\uniimg}};
+    % Width-limited so a spelt-out department and course cannot run under the
+    % logo in the opposite corner.
+    \node[anchor=north west,inner sep=\nusb@lrmargin,align=left,text=white,
+          text width=\dimexpr\paperwidth-4\nusb@lrmargin-24mm\relax]
+      at (current page.north west)
+      {\large\bfseries\uniname\\[0.15em]
+       \normalfont\small\itshape\deptname{} --- \coursename};
+  \end{tikzpicture}%
+  \vskip 30mm
+  \begingroup
+  \raggedright
+  \usebeamercolor[fg]{title page}%
+  {\footnotesize\bfseries\MakeUppercase{\reporttype}\par}
+  \vskip 0.35em
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+  \ifx\insertsubtitle\@empty\else
+    \vskip 0.3em
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+  \fi
+  \vskip 0.55em
+  {\color{white}\rule{0.97\textwidth}{0.6mm}\par}
+  \vskip 0.9em
+  % One author to a line, as the cover page of nus-report.cls sets them. Run
+  % together on one line, a list of several full names wraps wherever it happens
+  % to fit, which is in the middle of somebody's name; and a project's author
+  % list is short enough that a line each costs nothing.
+  %
+  % The hook is \beamer@andtitle rather than \and, because \insertauthor
+  % redefines \and to that inside its own expansion, so an outer
+  % \renewcommand{\and} would be discarded. A single author has no \and and is
+  % unaffected.
+  {\usebeamerfont{author}\usebeamercolor[fg]{author}%
+   \def\beamer@andtitle{\\}\insertauthor\par}
+  \vskip 0.45em
+  {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+   \ifx\advisor\@empty\else
+     \quad\textbullet\quad Advised by \advisor
+     \ifx\advisordesg\@empty\else, \advisordesg\fi
+   \fi\par}
+  \endgroup
+}
+
+%----------------------------------------
+%   SECTION PAGE
+%----------------------------------------
+% The same full-bleed ground as the title page, which is what lets the whole
+% theme take a single light-on-dark logo. The logo is sized from the frame
+% title bar's height less its inset, so a section page and a frame title show
+% it at the same scale.
+%
+% Like the title page it goes on a frame with the chrome suppressed, since the
+% navigation band would otherwise be drawn blue-on-blue:
+%   \frame[plain]{\sectionpage}
+%
+% \sectiondescription, if one was set, is consumed here, so it applies to the
+% one section and does not have to be cleared by hand.
+\setbeamertemplate{section page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[nusBlue] (current page.north west) rectangle (current page.south east);
+  \end{tikzpicture}%
+  \begingroup
+  \usebeamercolor[fg]{section page}%
+  {\usebeamerfont{frametitle}\insertsection\hfill
+   \includegraphics[height=\dimexpr\nusb@ftitleheight-2\nusb@ftitlemargin\relax]{\uniimg}\par}
+  {\color{white}\rule{\textwidth}{0.6mm}\par}
+  \ifx\nusb@sectiondescription\@empty\else
+    \vskip 1.2em
+    {\usebeamerfont{normal text}\nusb@sectiondescription\par}
+    \global\let\nusb@sectiondescription\@empty
+  \fi
+  \par
+  \endgroup
+}
+
+%----------------------------------------
+%   HEADLINE (Frankfurt-style section navigation)
+%----------------------------------------
+% Compact capsules for the current section and plain text for the rest, so the
+% navigation takes the width the section names need instead of dividing the
+% slide into equal segments regardless of how long the names are.
+%
+% One band, not two. The template set the full title and the date on a
+% band of their own above the navigation, which spent two lines of a 16:9 slide
+% on information that is already on the title page; the short title is in the
+% footer instead.
+\setbeamertemplate{section in head/foot}{%
+  \colorbox{nusBlue}{\strut\hspace{0.6em}\textcolor{white}{\insertsectionhead}\hspace{0.6em}}%
+}
+\setbeamertemplate{section in head/foot shaded}{%
+  \vphantom{\insertsectionhead}\textcolor{nusBlue}{\insertsectionhead}%
+}
+
+\setbeamertemplate{headline}{%
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.6ex,dp=1.1ex,center]{headline}%
+    \insertsectionnavigationhorizontal{\dimexpr\paperwidth-2\nusb@ftitlemargin\relax}{}{}%
+  \end{beamercolorbox}%
+}
+
+%----------------------------------------
+%   NAV SYMBOLS
+%----------------------------------------
+\setbeamertemplate{navigation symbols}{}
+
+%----------------------------------------
+%   FRAMETITLE
+%----------------------------------------
+% The bar has the same ground as the title and section pages, so the logo needs
+% no special handling here; see \uniimg in beamerthemenus.sty.
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\nusb@ftitleheight]{frametitle}%
+    \vbox to \nusb@ftitleheight{%
+      \vfill
+      \hbox to \paperwidth{%
+        \hspace{\nusb@ftitlemargin}%
+        \usebeamerfont{frametitle}\insertframetitle
+        \hfill
+        \includegraphics[height=1.2em]{\uniimg}
+        \hspace{\nusb@ftitlemargin}%
+      }%
+      \vfill
+    }%
+  \end{beamercolorbox}%
+}
+
+%----------------------------------------
+%   FOOTLINE
+%----------------------------------------
+% Mirrors the footer of nus-report.cls as far as a deck can: the authors on one
+% side, the frame count on the other, the institution between them. Every field
+% here is a short form, because the line has one line's worth of room and a full
+% department or course name will run into its neighbour.
+\setbeamertemplate{footline}{%
+  \leavevmode
+  \hbox{%
+    \begin{beamercolorbox}[wd=.26\paperwidth,ht=2.25ex,dp=\nusb@footermargin,left]{lfooter}%
+      \hspace{\nusb@footermargin}\insertshortauthor%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.48\paperwidth,ht=2.25ex,dp=\nusb@footermargin,center]{mfooter}%
+      \shortuniname{} --- \shortdeptname{} | \shortcoursename%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.26\paperwidth,ht=2.25ex,dp=\nusb@footermargin,right]{rfooter}%
+      \reporttype{} :: \insertframenumber{} / \inserttotalframenumber\hspace{\nusb@footermargin}%
+    \end{beamercolorbox}%
+  }%
+}
+
+%----------------------------------------
+%   FRAME TITLE CONTINUATION
+%----------------------------------------
+% On a frame broken by [allowframebreaks], print "(2/3)" rather than beamer's
+% roman numeral, which gives no sense of how many parts are still to come.
+\newcounter{nusb@cont}
+\setbeamertemplate{frametitle continuation}{%
+  \setcounter{nusb@cont}{\beamer@endpageofframe}%
+  \addtocounter{nusb@cont}{1}%
+  \addtocounter{nusb@cont}{-\beamer@startpageofframe}%
+  (\insertcontinuationcount/\arabic{nusb@cont})%
+}
+
+%----------------------------------------
+\mode<all>

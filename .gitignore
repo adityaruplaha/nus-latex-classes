@@ -19,3 +19,8 @@ common-assets/
 *.synctex.gz
 *.toc
 _minted*/
+
+# beamer leaves three more behind.
+*.nav
+*.snm
+*.vrb

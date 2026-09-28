@@ -1,0 +1,174 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemenus}[2026/09/28 v1.0 University presentation theme, NUS defaults]
+%%
+%% Copyright (c) 2026, Adityarup Laha
+%% All rights reserved.
+%%
+%% Licensed under the BSD 3-Clause License. See the LICENSE file in the project
+%% root for the full text.
+%%
+%% The university logo referenced by \uniimg is NOT part of this work and is
+%% not distributed with it. See README.md.
+%%
+%% Provenance. This theme descends, substantially modified, from the ZHAW
+%% beamer template by Martin Oswald,
+%%   https://www.overleaf.com/latex/templates/zhaw-beamer-template/mmxmhmhswrtx
+%% It is retargeted at the metadata interface of nus-report.cls, so that a
+%% document's metadata block is the same whether it is set as a report or as a
+%% deck.
+%%
+
+\mode<presentation>
+
+%----------------------------------------
+%   INTERNAL SETTINGS
+%----------------------------------------
+% The frame title bar's height and the inset of its contents. The logo in the
+% bar and the one on a section page are both sized from these, so that the two
+% agree without either being given a length of its own.
+%
+% Real lengths rather than macros holding the text of a length, so that the
+% templates can do arithmetic on them -- the logo in the frame title bar is
+% sized as the bar less twice its inset, and the section navigation is given the
+% paper width less the same inset on each side.
+\newlength{\nusb@lrmargin}    \setlength{\nusb@lrmargin}{8mm}
+\newlength{\nusb@ftitleheight}\setlength{\nusb@ftitleheight}{11mm}
+\newlength{\nusb@ftitlemargin}\setlength{\nusb@ftitlemargin}{2mm}
+\newlength{\nusb@footermargin}\setlength{\nusb@footermargin}{2mm}
+
+%----------------------------------------
+%   REQUIREMENTS
+%----------------------------------------
+\RequirePackage{calc}
+\RequirePackage{tikz}
+\usetikzlibrary{backgrounds}
+
+% Latin Modern in T1 rather than the bitmap Computer Modern that beamer would
+% otherwise use: scalable outlines, so the PDF stays sharp when a projector
+% rescales it, and real accented glyphs, which matters for a deck whose author
+% list is not all ASCII.
+%
+% Note that neither Computer Modern Sans nor Latin Modern Sans has a small-caps
+% shape. \scshape in a deck set in the default sans face falls back to the
+% serif small caps without saying so, which is why this theme uses uppercase in
+% a smaller size wherever the report class uses \textsc.
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+
+%----------------------------------------
+%   METADATA
+%----------------------------------------
+% The commands below deliberately mirror nus-report.cls, including the names of
+% the value macros, so that a project's report and its deck can share one
+% metadata block. What this theme does not define is \title, \author, \subtitle,
+% \date and \institute: beamer already provides those, and its \title[<short>]
+% and \author[<short>] optional arguments already do what nus-report.cls had to
+% add by hand. Use beamer's.
+%
+% \nusb@setshort{<macro>}{<short>}{<full>}
+% Stores the short form of a field, falling back to the full form when the
+% optional argument was omitted, so a document that supplies no short form
+% behaves as though the short forms did not exist. This is \nusr@setshort from
+% nus-report.cls under another name; the two classes are never loaded together,
+% so the definition is repeated rather than shared.
+\newcommand{\nusb@setshort}[3]{%
+  \def\nusb@tmp{#2}%
+  \ifx\nusb@tmp\@empty
+    \gdef#1{#3}%
+  \else
+    \gdef#1{#2}%
+  \fi
+}
+
+% \setuniname[<short>]{<full>}
+% The full name appears on the title page. The short one is in the footer,
+% where it shares one line with the department and course names and the frame
+% count; at 4:3 a spelt-out university name wraps that line onto two. This is
+% the one metadata command that takes a short form here and not in
+% nus-report.cls, whose running header gives the university a line of its own.
+\newcommand{\uniname}{National University of Singapore}
+\newcommand{\shortuniname}{NUS}
+\newcommand{\setuniname}[2][]{%
+  \gdef\uniname{#2}%
+  \nusb@setshort{\shortuniname}{#1}{#2}%
+}
+
+% Every place this theme shows the logo -- the title page, the section page and
+% the frame title bar -- has the institutional colour behind it, so only one
+% version of the logo is ever needed and it is the light-on-dark one. Set it to
+% whichever file that is; most institutions publish one, usually described as
+% the reversed, white or "on colour background" version.
+%
+% This is the one default that differs from nus-report.cls, which puts its logo
+% on a white cover page and so wants the full-colour file.
+\newcommand{\uniimg}{common-assets/nus-logo-blue-b-horizontal.png}
+\newcommand{\setuniimg}[1]{\renewcommand{\uniimg}{#1}}
+
+% \setdeptname[<short>]{<full>}
+% The full name appears on the title page, the short one in the footer, where it
+% shares a line with the university and course names.
+\newcommand{\deptname}{DSDS}
+\newcommand{\shortdeptname}{DSDS}
+\newcommand{\setdeptname}[2][]{%
+  \gdef\deptname{#2}%
+  \nusb@setshort{\shortdeptname}{#1}{#2}%
+}
+
+% \setcoursename[<short>]{<full>}
+% The full name appears on the title page, the short one in the footer.
+\newcommand{\coursename}{Course name}
+\newcommand{\shortcoursename}{Course name}
+\newcommand{\setcoursename}[2][]{%
+  \gdef\coursename{#2}%
+  \nusb@setshort{\shortcoursename}{#1}{#2}%
+}
+
+% Named \setreporttype rather than \setpresentationtype, against the grain of
+% the word, so that the metadata block carries across from nus-report.cls
+% unchanged. Only the value differs: "Interim Report" against "Interim
+% Presentation".
+\newcommand{\reporttype}{Presentation}
+\newcommand{\setreporttype}[1]{\renewcommand{\reporttype}{#1}}
+
+% An empty advisor suppresses the whole advisor block on the title page, rather
+% than printing the placeholder that the report class's cover page would show.
+\newcommand{\advisor}{}
+\newcommand{\setadvisor}[1]{\renewcommand{\advisor}{#1}}
+
+\newcommand{\advisordesg}{}
+\newcommand{\setadvisordesg}[1]{\renewcommand{\advisordesg}{#1}}
+
+%----------------------------------------
+%   PER-FRAME COMMANDS
+%----------------------------------------
+% \sectiondescription{<text>} sets one line of context for the next section
+% page. It is consumed when that page is typeset, so it applies to one section
+% only and does not have to be cleared by hand.
+\newcommand{\sectiondescription}[1]{\gdef\nusb@sectiondescription{#1}}
+\gdef\nusb@sectiondescription{}
+
+%----------------------------------------
+%   SETTINGS
+%----------------------------------------
+% The section navigation is read from the back of a room, so it is a step
+% larger than beamer's \tiny default.
+\setbeamerfont{section in head/foot}{size=\scriptsize}
+\setbeamerfont{subtitle}{size=\normalsize}
+% A course project's author list is several full names, which at the default
+% size wraps mid-name on the title page.
+\setbeamerfont{author}{size=\small}
+
+\useinnertheme{nus}
+\useoutertheme{nus}
+\usecolortheme{nus}
+
+\setbeamersize{text margin left=\nusb@lrmargin,text margin right=\nusb@lrmargin}
+
+% The theme is laid out for 16:9. It is a class option rather than something a
+% theme can set, so it belongs in the document:
+%   \documentclass[aspectratio=169]{beamer}
+% At 4:3 nothing breaks, but the title page and the section navigation are
+% tighter than they were drawn to be.
+
+%----------------------------------------
+\mode<all>

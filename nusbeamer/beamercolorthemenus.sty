@@ -1,0 +1,97 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamercolorthemenus}[2026/09/28 v1.0 Colour theme for beamerthemenus]
+%%
+%% Copyright (c) 2026, Adityarup Laha. BSD 3-Clause; see LICENSE.
+%%
+%% Descends, substantially modified, from the ZHAW beamer template by Martin
+%% Oswald; see beamerthemenus.sty for the full provenance.
+%%
+
+\mode<presentation>
+
+%----------------------------------------
+%   PALETTE
+%----------------------------------------
+% The two institutional colours, and a neutral grey for secondary text.
+% Override them in the preamble with \definecolor under the same names to
+% retarget the theme at another institution; nothing below refers to a colour by
+% value.
+%
+% The blue and the orange are the published NUS corporate colours, taken from
+% the identity guidelines at
+%   https://nus.edu.sg/identity/guidelines/corporate-colours
+% which give NUS Blue as R0 G61 B124, Pantone 294, and NUS Orange as R239 G124
+% B0, Pantone 152. Do not sample them from a logo file instead: the raster logo
+% in common-assets/ renders its fills at #1D427C and #ED8224, neither of which
+% is the specified colour.
+%
+% NUS's secondary colours are Gold, Pantone 872, and Silver, Pantone 8420; the
+% guidelines publish no screen values for either, so neither is defined here.
+% The grey below is not an institutional colour, only a neutral for secondary
+% text.
+%
+% The grey is deliberately not called `gray'. xcolor already defines that name,
+% and redefining it silently changes every \textcolor{gray} and every `black!30'
+% shorthand in the document, including inside other packages' output.
+\definecolor{nusBlue}{RGB}{0,61,124}      % #003D7C, Pantone 294
+\definecolor{nusOrange}{RGB}{239,124,0}   % #EF7C00, Pantone 152
+\definecolor{nusGray}{RGB}{154,154,156}
+
+%----------------------------------------
+%   COLORS
+%----------------------------------------
+% beamer derives a great many defaults from `structure', so setting it first
+% means anything this file does not mention still comes out in the right blue.
+\setbeamercolor{structure}{fg=nusBlue}
+\setbeamercolor{normal text}{fg=black, bg=white}
+
+% The title page and the section pages are the institutional blue with white
+% type, which is also what puts the logo on the same ground everywhere in the
+% theme and so lets it take a single light-on-dark file. See \uniimg.
+\setbeamercolor{title page}{fg=white, bg=nusBlue}
+\setbeamercolor{section page}{fg=white, bg=nusBlue}
+\setbeamercolor{frametitle}{fg=white, bg=nusBlue}
+\setbeamercolor{headline}{fg=nusBlue, bg=white}
+
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=white}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{date}{fg=nusGray!60!white}
+
+\setbeamercolor{lfooter}{fg=nusGray}
+\setbeamercolor{mfooter}{fg=nusGray}
+\setbeamercolor{rfooter}{fg=nusGray}
+
+\setbeamercolor{section in toc}{fg=black}
+\setbeamercolor{subsection in toc}{fg=black}
+
+\setbeamercolor{itemize item}{fg=nusBlue}
+\setbeamercolor{itemize subitem}{fg=nusGray}
+\setbeamercolor{itemize subsubitem}{fg=nusGray}
+\setbeamercolor{enumerate item}{fg=nusBlue}
+\setbeamercolor{enumerate subitem}{fg=nusGray}
+\setbeamercolor{enumerate subsubitem}{fg=nusGray}
+
+\setbeamercolor{caption name}{fg=nusBlue}
+
+% The alert colour is the second institutional colour rather than the first.
+% The template gave `block title alerted' the same blue as an ordinary block title,
+% which left an alerted block indistinguishable from a plain one.
+\setbeamercolor{alerted text}{fg=nusOrange}
+\setbeamercolor{block title}{bg=nusBlue, fg=white}
+\setbeamercolor{block body}{bg=nusGray!25, fg=black}
+\setbeamercolor{block title alerted}{bg=nusOrange, fg=white}
+\setbeamercolor{block body alerted}{bg=nusOrange!12, fg=black}
+\setbeamercolor{block title example}{bg=nusGray!60, fg=white}
+\setbeamercolor{block body example}{bg=nusGray!18, fg=black}
+
+\setbeamercolor{link}{fg=nusBlue}
+
+\setbeamercolor{bibliography entry title}{fg=nusBlue}
+\setbeamercolor{bibliography entry author}{fg=nusBlue}
+\setbeamercolor{bibliography entry location}{fg=nusGray}
+\setbeamercolor{bibliography entry note}{fg=black}
+\setbeamercolor{bibliography item}{fg=black}
+
+%----------------------------------------
+\mode<all>
