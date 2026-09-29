@@ -1,6 +1,6 @@
-# University student report and presentation formats
+# nus-latex-classes
 
-Two LaTeX document classes, a beamer theme and one style package for university coursework, project reports and the talks that go with them — the kind of document that needs an institution's name and logo, a course code, an advisor and a declaration block, rather than the journal apparatus that `article` and `report` assume.
+LaTeX document classes, a beamer theme, and a style package for university coursework, project reports, the talks that go with them, and exam cheatsheets. The report classes and the theme are for the kind of document that needs an institution's name and logo, a course code, an advisor, and a declaration block, rather than the journal apparatus that `article` and `report` assume.
 
 Nothing here is tied to a particular university. The classes ship with defaults for the National University of Singapore because that is where they were written, and every institutional field is a one-line override. See [Using these elsewhere](#using-these-elsewhere).
 
@@ -8,10 +8,11 @@ Nothing here is tied to a particular university. The classes ship with defaults 
 | --- | --- |
 | `nus-report.cls` | Full report format with a separate cover page, front matter and a table of contents. For project reports and theses. |
 | `nus-report-short.cls` | Compact format with no cover page: the title, authors, advisor and course appear as a block at the top of the first page. For homework sets and short assignments. |
+| `nus-cheatsheet.cls` | Dense multi-column crib sheet for closed-book examinations that allow a page or two of notes. |
 | `codespace.sty` | Code listings and algorithm environments, with the source file embedded in the PDF for download. |
-| `nusbeamer/` | Presentation theme for `beamer`, taking the same metadata as the two classes. For the talk that accompanies a report. |
+| `nusbeamer/` | Presentation theme for `beamer`, taking the same metadata as the two report classes. For the talk that accompanies a report. |
 
-The two classes are independent — load one or the other, never both. Their `nus-` filenames are historical; the classes themselves are generic. The beamer theme is loaded by `beamer` itself, not alongside a class from this repository.
+The two report classes are independent — load one or the other, never both, and the cheatsheet class stands alone. Their `nus-` filenames are historical; the classes themselves are generic. The beamer theme is loaded by `beamer` itself, not alongside a class from this repository.
 
 ## Quick start
 
@@ -159,6 +160,40 @@ Most institutions publish such a file; look in the identity guidelines for a ver
 
 Neither Computer Modern Sans nor Latin Modern Sans has a small-caps shape, so `\scshape` in a deck set in the default sans face falls back to the serif small caps without saying so. The theme uses uppercase in a smaller size wherever the report classes use `\textsc`. Do the same in the document, or load a sans face that has real small caps.
 
+## The cheatsheet class
+
+`nus-cheatsheet.cls` sets a crib sheet on A4 in several columns at a small, fixed font size, with a running header bar on every page (title, optional subtitle, author, date, and page x of y), numbered section bars (the number in an orange badge, the title in small caps; a title too long for one line makes the bar two lines deep rather than being clipped) and a framed box per result. It needs `tcolorbox`. The header takes the standard `\title`, `\author` and `\date`, plus `\subtitle`; `\maketitle` is not needed.
+
+```latex
+\documentclass[cols=3, size=7.2, pages=2]{nus-cheatsheet}
+\title{Course --- Midterm}
+\subtitle{Lectures 1--6}   % optional
+\author{Name}
+% \date defaults to the compile date, as day month year
+\begin{document}
+\begin{cheatsheet}
+\section{Topic}
+\begin{entry}{Result}
+  statement \cex counterexample \pf proof idea.
+  \sub{Related result} statement.
+\end{entry}
+\end{cheatsheet}
+\end{document}
+```
+
+| Option | Default | Effect |
+| --- | --- | --- |
+| `cols=<n>` | `3` | Columns per page. |
+| `size=<pt>` | `6.5` | Body font size in points. |
+| `leading=<x>` | `1.2` | Baseline skip as a multiple of the font size. |
+| `margin=<length>` | `5mm` | Margin on all four sides. |
+| `pages=<n>` | `2` | Page budget. The class warns at the end of the run if the sheet is longer. |
+| `landscape` | off | Landscape A4. |
+| `norules` | off | No rules between columns. |
+| `breakboxes` | off | Let entry boxes split across columns and pages. By default a box always moves whole to the next column. |
+
+Each result goes in an `entry` box, whose title is run in at the start of its text; an empty title gives an untitled box, and by default a box never splits across a column or page. Columns are flush: each is stretched to full height, with its spare space shared evenly between the boxes. `\sub{...}` is a run-in heading for a second result inside the same box, and `\kw`, `\cex`, `\pf` and `\warn` mark a keyword, a counterexample (a tag on a light scarlet ground), a proof idea (on light yellow), and a caution. Body text is ragged-right and serif; sans serif is used only in the header and the section bars. The usual workflow is to write the content first and then raise `size` until the sheet just fits the budget; if the size that fits is too small to read, cut content rather than spacing. Text is set in `newtxtext` and `newtxmath`, with TeX Gyre Heros as the sans face; `sensible-math.sty` is loaded when it is on the TeX path, and `amsmath`, `amssymb`, and `amsthm` otherwise. The accent colours are the NUS blue and orange, named `csaccent` and `cssub`; redefine them with `\definecolor` after `\documentclass` to change them.
+
 ## Using these elsewhere
 
 The NUS values above are defaults, not assumptions. Point the classes at your own institution in the preamble:
@@ -212,6 +247,6 @@ The beamer theme additionally loads `lmodern` and `fontenc`, so that a deck is s
 
 BSD 3-Clause; see [LICENSE](LICENSE).
 
-The licence covers the two classes, the beamer theme and the style package. It does not extend to any logo you supply, which remains subject to whatever terms its owner sets.
+The licence covers the classes, the beamer theme, and the style package. It does not extend to any logo you supply, which remains subject to whatever terms its owner sets.
 
 `nusbeamer/` descends from `isibeamer`, a personal template I used at the Indian Statistical Institute, which in turn descends, substantially modified, from the [ZHAW beamer template](https://www.overleaf.com/latex/templates/zhaw-beamer-template/mmxmhmhswrtx) by Martin Oswald.
