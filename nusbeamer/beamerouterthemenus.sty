@@ -28,6 +28,7 @@
 %
 % Use it on a frame of its own with the chrome suppressed:
 %   \frame[plain]{\titlepage}
+\newcount\nusb@authorcount
 \setbeamertemplate{title page}{%
   \begin{tikzpicture}[remember picture,overlay]
     \fill[nusBlue] (current page.north west) rectangle (current page.south east);
@@ -57,15 +58,39 @@
   \vskip 0.9em
   % One author to a line, as the cover page of nus-report.cls sets them. Run
   % together on one line, a list of several full names wraps wherever it happens
-  % to fit, which is in the middle of somebody's name; and a project's author
-  % list is short enough that a line each costs nothing.
+  % to fit, which is in the middle of somebody's name.
+  %
+  % A line each fits four authors under the fixed gap above the title; five,
+  % with a subtitle, ran the date off the foot of a 16:9 page. So the names
+  % flow into columns as the list grows, at most four to a column: one column
+  % up to four authors, two up to eight, three beyond that. Four rather than
+  % three keeps the four-author decks made before the columns unchanged. The
+  % columns sit in a block narrower than the text width when there are two,
+  % so the second does not start half a page away from the first.
   %
   % The hook is \beamer@andtitle rather than \and, because \insertauthor
   % redefines \and to that inside its own expansion, so an outer
   % \renewcommand{\and} would be discarded. A single author has no \and and is
-  % unaffected.
+  % unaffected. The authors are counted by expanding \insertauthor once into a
+  % box that is thrown away, with the hook counting instead of breaking.
+  \global\nusb@authorcount\@ne
+  \setbox\z@\hbox{\def\beamer@andtitle{\global\advance\nusb@authorcount\@ne}\insertauthor}%
   {\usebeamerfont{author}\usebeamercolor[fg]{author}%
-   \def\beamer@andtitle{\\}\insertauthor\par}
+   \ifnum\nusb@authorcount>4
+     \parskip\z@ \multicolsep\z@
+     \ifnum\nusb@authorcount>8
+       \def\nusb@authorcols{3}\def\nusb@authorwidth{\textwidth}%
+     \else
+       \def\nusb@authorcols{2}\def\nusb@authorwidth{0.66\textwidth}%
+     \fi
+     \begin{minipage}[t]{\nusb@authorwidth}%
+       \begin{multicols}{\nusb@authorcols}%
+         \raggedright\def\beamer@andtitle{\par}\insertauthor\par
+       \end{multicols}%
+     \end{minipage}\par
+   \else
+     \def\beamer@andtitle{\\}\insertauthor\par
+   \fi}
   \vskip 0.45em
   {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
    \ifx\advisor\@empty\else

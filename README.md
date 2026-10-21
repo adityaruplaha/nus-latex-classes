@@ -128,6 +128,7 @@ The alternative, if a document would rather not carry the block, is to symlink t
 | `\setuniname` | no short form | `\setuniname[<short>]{<full>}`, default short `NUS` |
 | `\setuniimg` default | the full-colour logo, for a white cover page | the light-on-dark logo, since every ground in the theme is coloured |
 | Aspect ratio | — | pass `aspectratio=169` to `\documentclass`; a theme cannot set it |
+| Author list on the title page | one author to a line | one to a line up to four authors, then two columns up to eight and three beyond, at most four to a column, so a long list does not run off the page |
 
 `\setuniname` is the one metadata command that takes a short form here and not in the report classes: the deck's footer gives the university, department and course one line between them, and at 4:3 a spelt-out university name wraps it onto two. The report classes' running header gives the university a line of its own, so the question does not arise there.
 
@@ -239,7 +240,7 @@ Because those symlinks may point outside the document's own repository, run `lat
 
 A full TeX Live installation covers everything here. Build with `latexmk -pdf`, which runs `biber` and reruns as required.
 
-The beamer theme additionally loads `lmodern` and `fontenc`, so that a deck is set in scalable outlines rather than the bitmap Computer Modern that `beamer` would otherwise use, and so that accented names in an author list come out as real glyphs.
+The beamer theme additionally loads `multicol`, for the author columns on the title page, and `lmodern` and `fontenc`, so that a deck is set in scalable outlines rather than the bitmap Computer Modern that `beamer` would otherwise use, and so that accented names in an author list come out as real glyphs.
 
 `codespace.sty` additionally needs **Pygments** installed and the document compiled with `--shell-escape`, because it uses `minted`. Load it only in documents that typeset code.
 
