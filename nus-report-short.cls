@@ -206,6 +206,15 @@
   \nusr@setshort{\@shorttitle}{#1}{#2}%
 }
 
+% The running header's logo sits in a two-row \multirow cell, 2 rows of
+% \@arstrutbox tall. multirow pads the cell with struts, whose depth pushed the
+% logo 1.6pt past the cell and overfilled every page. Without the struts, and
+% with the logo's box made exactly the cell's height (its depth taking up the
+% rest), it fits; the logo is set where it was before.
+\def\nusr@nostrut{\let\strut\relax}
+\newcommand{\nusr@fitlogo}[1]{%
+  \raisebox{0pt}[\height][\dimexpr 2\ht\@arstrutbox+2\dp\@arstrutbox-\height\relax]{#1}}
+
 \fancypagestyle{firstpage}{
   \fancyhead{}
   \fancyhead[L]{
@@ -235,7 +244,7 @@
   \fancyhead[R]{
     \newcommand{\arraystretchtemp}{\arraystretch}\renewcommand{\arraystretch}{1}
     \begin{tabular}{rr}
-      \textbf{\uniname} & \multirow{2}{*}{\includegraphics[height=2.2em]{\uniimg}} \\
+      \textbf{\uniname} & {\nusr@nostrut\multirow{2}{*}{\nusr@fitlogo{\includegraphics[height=2.2em]{\uniimg}}}} \\
       {\shortdeptname} | {\shortcoursename} &
     \end{tabular}
     \renewcommand{\arraystretch}{\arraystretchtemp}
