@@ -223,7 +223,12 @@
 \fancyfoot[C]{\scriptsize {\thepage}}
 \fancyfoot[R]{\scriptsize {\renewcommand{\and}{\unskip, }\@shortauthor}}
 
+% The cover is labelled "Cover" rather than numbered, as in many books: PDF
+% viewers show that label, and its page anchor (page.Cover) cannot clash with
+% the first numbered page once \frontmatter or \mainmatter restarts the count.
 \renewcommand{\maketitle}{
+  \begingroup
+  \renewcommand{\thepage}{Cover}%
   \thispagestyle{empty}
 
   \begin{center}
@@ -257,4 +262,5 @@
   \end{center}
 
   \clearpage
+  \endgroup
 }
