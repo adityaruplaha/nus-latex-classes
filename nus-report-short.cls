@@ -141,6 +141,20 @@
   linkcolor = orange
 }
 
+% Section-level entries in the PDF bookmarks and any table of contents for the
+% two headings a document usually sets unnumbered. A biblatex bibliography is
+% headed as with heading=bibintoc unless the document asks for another heading.
+% \appendix sets an anchor, so that an unnumbered appendix heading followed by
+% \addcontentsline is bookmarked where it stands rather than at the previous
+% numbered section.
+\AtBeginDocument{%
+  \@ifpackageloaded{biblatex}{%
+    \defbibheading{bibliography}[\refname]{%
+      \phantomsection\printbibheading[heading=bibintoc,title={#1}]}%
+  }{}%
+  \g@addto@macro\appendix{\phantomsection}%
+}
+
 \geometry{
   a4paper,
   hmargin=0.85in,

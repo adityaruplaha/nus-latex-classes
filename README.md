@@ -66,6 +66,8 @@ Separate multiple authors with `\and`, as in standard LaTeX. It renders as a lin
 
 Both classes define `\frontmatter`, `\mainmatter` and `\backmatter`, which switch page numbering and start a new page, as in the `book` class.
 
+In both classes a `biblatex` bibliography gets an entry in the PDF bookmarks and in any table of contents, as with `heading=bibintoc`, unless `\printbibliography` is given another heading. `\appendix` also sets a link anchor, so an unnumbered appendix heading followed by `\addcontentsline` is bookmarked where it stands.
+
 ## The presentation theme
 
 `\usetheme{nus}` gives a deck the same institutional furniture as the two report classes, and takes the **same metadata commands**, so a project's report and its talk can share one metadata block and differ only in what `\setreporttype` is set to.
